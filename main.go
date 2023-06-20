@@ -8,19 +8,19 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		_, err := createBucket(ctx)
+		_, err := createInfrastructure(ctx)
 
 		return err
 	})
 }
 
 type infrastructure struct {
-	bucket       *storage.Bucket
-	iamBinding   *storage.BucketIAMBinding
-	bucketObject *storage.BucketObject
+	bucket           *storage.Bucket
+	IAMBindingPolicy *storage.BucketIAMBinding
+	bucketObject     *storage.BucketObject
 }
 
-func createBucket(ctx *pulumi.Context) (*infrastructure, error) {
+func createInfrastructure(ctx *pulumi.Context) (*infrastructure, error) {
 	bucket, err := storage.NewBucket(ctx, "my-bucket", &storage.BucketArgs{
 		Location: pulumi.String("US"),
 	})
@@ -28,7 +28,7 @@ func createBucket(ctx *pulumi.Context) (*infrastructure, error) {
 		return nil, err
 	}
 
-	iamBinding, err := storage.NewBucketIAMBinding(ctx, "my-bucket-IAMBinding", &storage.BucketIAMBindingArgs{
+	IAMBindingPolicy, err := storage.NewBucketIAMBinding(ctx, "my-bucket-IAMBinding", &storage.BucketIAMBindingArgs{
 		Bucket: bucket.Name,
 		Role:   pulumi.String("roles/storage.objectViewer"),
 		Members: pulumi.StringArray{
@@ -50,12 +50,12 @@ func createBucket(ctx *pulumi.Context) (*infrastructure, error) {
 		return nil, err
 	}
 
-	bucketEndpoint := pulumi.Sprintf("http://storage.googleapis.com/%s/%s", bucket.Name, bucketObject.Name)
+	bucketEndpoint := pulumi.Sprintf("https://storage.googleapis.com/%s/%s", bucket.Name, bucketObject.Name)
 	ctx.Export("bucketEndpoint", bucketEndpoint)
 
 	return &infrastructure{
-		bucket:       bucket,
-		iamBinding:   iamBinding,
-		bucketObject: bucketObject,
+		bucket:           bucket,
+		IAMBindingPolicy: IAMBindingPolicy,
+		bucketObject:     bucketObject,
 	}, nil
 }
