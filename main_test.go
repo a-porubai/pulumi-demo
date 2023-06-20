@@ -8,7 +8,7 @@ import (
 
 func TestCreateInfrastructure(t *testing.T) {
 	config := map[string]string{
-		"bucket:fileName": "index-dev.html",
+		"bucket:fileName": "index.html",
 	}
 
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
@@ -59,7 +59,7 @@ func TestCreateInfrastructure(t *testing.T) {
 			source := all[1].(pulumi.Asset)
 
 			const expectedContentType = "text/html"
-			const expectedFilePath = "index-dev.html"
+			const expectedFilePath = "index.html"
 
 			if contentType != expectedContentType {
 				t.Errorf("invalid content type got: %s, want: %s", contentType, expectedContentType)
