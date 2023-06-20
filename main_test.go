@@ -16,7 +16,6 @@ func TestCreateInfrastructure(t *testing.T) {
 		if err != nil {
 			return err
 		}
-
 		bucket := infrastructureObjects.bucket
 		pulumi.All(bucket.Location).ApplyT(func(all []interface{}) error {
 			location := all[0].(string)
