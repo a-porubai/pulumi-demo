@@ -12,7 +12,7 @@ func TestCreateInfrastructure(t *testing.T) {
 	}
 
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		infrastructureObjects, err := createBucket(ctx)
+		infrastructureObjects, err := createInfrastructure(ctx)
 		if err != nil {
 			return err
 		}
@@ -30,7 +30,7 @@ func TestCreateInfrastructure(t *testing.T) {
 			return nil
 		})
 
-		bucketIAMBinging := infrastructureObjects.iamBinding
+		bucketIAMBinging := infrastructureObjects.IAMBindingPolicy
 		pulumi.All(bucketIAMBinging.Role, bucketIAMBinging.Members).ApplyT(func(all []interface{}) error {
 			role := all[0].(string)
 			members := all[1].([]string)
