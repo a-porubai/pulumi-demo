@@ -50,8 +50,8 @@ func createInfrastructure(ctx *pulumi.Context) (*infrastructure, error) {
 		return nil, err
 	}
 
-	bucketEndpoint := pulumi.Sprintf("https://storage.googleapis.com/%s/%s", bucket.Name, bucketObject.Name)
-	ctx.Export("bucketEndpoint", bucketEndpoint)
+	fileEndpoint := pulumi.Sprintf("https://storage.googleapis.com/%s/%s", bucket.Name, bucketObject.Name)
+	ctx.Export("fileEndpoint", fileEndpoint)
 
 	return &infrastructure{
 		bucket:           bucket,
